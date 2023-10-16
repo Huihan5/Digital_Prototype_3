@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
 
     SpriteRenderer myRend;
 
+    public AudioSource mySource;
+    public AudioClip walkingSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,34 +26,63 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Player Movement & Boundary
-        if (transform.position.x >= leftBoundary && transform.position.x <= rightBoundary)
+        //Player Movement
+        if (transform.position.x > leftBoundary && transform.position.x < rightBoundary)
         {
             if (Input.GetKey(KeyCode.A))
             {
                 transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0, 0);
-                myRend.flipX = false;
+                myRend.flipX = true;
+
+                WalkingSound();
             }
             else if (Input.GetKey(KeyCode.D))
             {
                 transform.position += new Vector3(moveSpeed * Time.deltaTime, 0, 0);
-                myRend.flipX = true;
+                myRend.flipX = false;
+
+                WalkingSound();
             }
         }
 
-        if (transform.position.y >= bottomBoundary && transform.position.y <= upBoundary)
+        if (transform.position.y > bottomBoundary && transform.position.y < upBoundary)
         {
             if (Input.GetKey(KeyCode.W))
             {
                 transform.position += new Vector3(0, moveSpeed * Time.deltaTime, 0);
-                myRend.flipY = false;
+                //myRend.flipY = false;
+
+                WalkingSound();
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 transform.position -= new Vector3(0, moveSpeed * Time.deltaTime, 0);
-                myRend.flipY = true;
+                //myRend.flipY = true;
+
+                WalkingSound();
             }
         }
+
+        //Boundary
+        //if (transform.position.x < leftBoundary)
+        //{
+        //    transform.position = new Vector3 (leftBoundary, transform.position.y, 0);
+
+        //}
+        //else if (transform.position.x > rightBoundary)
+        //{
+        //    transform.position = new Vector3(rightBoundary, transform.position.y, 0);
+        //}
+
+        //if (transform.position.x < bottomBoundary)
+        //{
+        //    transform.position = new Vector3(transform.position.x, bottomBoundary, 0);
+
+        //}
+        //else if (transform.position.x > upBoundary)
+        //{
+        //    transform.position = new Vector3(transform.position.x, upBoundary, 0);
+        //}
 
     }
 
@@ -66,9 +98,17 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene(3);
         }
 
-        if (collision.gameObject.name == "Lake")
+        //if (collision.gameObject.name == "Lake")
+        //{
+        //    SceneManager.LoadScene(4);
+        //}
+    }
+
+    void WalkingSound()
+    {
+        if (!mySource.isPlaying)
         {
-            SceneManager.LoadScene(4);
+            mySource.PlayOneShot(walkingSound);
         }
     }
 }
